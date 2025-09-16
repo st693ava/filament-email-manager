@@ -49,51 +49,58 @@ class EmailTemplateLayoutResource extends Resource
                 Tabs::make('EmailLayoutTabs')
                     ->columnSpanFull()
                     ->tabs([
-                        Tab::make('Information')
+                        Tab::make('Informação')
                             ->icon('heroicon-o-information-circle')
                             ->schema([
                                 FormComponents\TextInput::make('name')
+                                    ->label('Nome')
                                     ->required()
                                     ->maxLength(255)
                                     ->placeholder('Modern Email Layout'),
 
                                 FormComponents\Toggle::make('is_default')
-                                    ->helperText('Set as default layout for new templates'),
+                                    ->label('Layout Pré-definido')
+                                    ->helperText('Definir como layout pré-definido para novos modelos'),
                             ]),
 
-                        Tab::make('Structure')
+                        Tab::make('Estrutura')
                             ->icon('heroicon-o-code-bracket')
                             ->schema([
                                 FormComponents\CodeEditor::make('wrapper_html')
                                     ->language(Language::Html)
+                                    ->label('Conteúdo HTML')
                                     ->required()
-                                    ->helperText('Must contain {{content}} placeholder. Optional placeholders: {{header}}, {{footer}}, {{css}}')
+                                    ->helperText('Deve conter o marcador {{content}}. Marcadores opcionais: {{header}}, {{footer}}, {{css}}')
                                     ->default('<!DOCTYPE html><html><head><meta charset="utf-8"><style>{{css}}</style></head><body>{{header}}{{content}}{{footer}}</body></html>'),
 
                                 FormComponents\CodeEditor::make('header_html')
                                     ->language(Language::Html)
-                                    ->helperText('HTML content for the email header'),
+                                    ->label('Conteúdo HTML do Cabeçalho')
+                                    ->helperText('Conteúdo HTML para o cabeçalho do email'),
 
                                 FormComponents\CodeEditor::make('footer_html')
                                     ->language(Language::Html)
-                                    ->helperText('HTML content for the email footer'),
+                                    ->label('Conteúdo HTML do Rodapé')
+                                    ->helperText('Conteúdo HTML para o rodapé do email'),
                             ]),
 
-                        Tab::make('Styling')
+                        Tab::make('Tema')
                             ->icon('heroicon-o-paint-brush')
                             ->schema([
                                 FormComponents\CodeEditor::make('css_styles')
                                     ->language(Language::Css)
-                                    ->helperText('CSS styles for the email template'),
+                                    ->label('Estilos CSS')
+                                    ->helperText('Estilos CSS para o modelo de email'),
                             ]),
 
-                        Tab::make('Settings')
+                        Tab::make('Configurações')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
                                 FormComponents\KeyValue::make('settings')
-                                    ->helperText('Additional layout configuration options')
-                                    ->keyLabel('Setting')
-                                    ->valueLabel('Value'),
+                                    ->label('Configurações')
+                                    ->helperText('Opções de configuração de layout adicionais')
+                                    ->keyLabel('Configuração')
+                                    ->valueLabel('Valor'),
                             ]),
                     ])
 
@@ -107,75 +114,83 @@ class EmailTemplateLayoutResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
+                    ->label('Nome')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_default')
                     ->boolean()
+                    ->label('Layout Pré-definido')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('emailTemplates_count')
-                    ->label('Templates Using')
+                    ->label('Modelos a Usar')
                     ->counts('emailTemplates')
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Criado em')
                     ->toggleable(isToggledHiddenByDefault: true),
 
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Atualizado em')
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TernaryFilter::make('is_default')
-                    ->label('Default Layout')
+                    ->label('Layout Pré-definido')
                     ->boolean()
-                    ->trueLabel('Default layout')
-                    ->falseLabel('Non-default layouts')
+                    ->trueLabel('Layout pré-definido')
+                    ->falseLabel('Layouts não pré-definidos')
                     ->native(false),
             ])
             ->actions([
-                Actions\Action::make('preview')
-                    ->icon('heroicon-o-eye')
-                    ->color('info')
-                    ->modalHeading('Layout Preview')
-                    ->modalContent(function (EmailTemplateLayout $record) {
-                        $previewUrl = route('filament-email-manager.preview.layout', $record);
+                Actions\ActionGroup::make([
+                    Actions\Action::make('preview')
+                        ->label('Pré-visualizar')
+                        ->icon('heroicon-o-eye')
+                        ->color('info')
+                        ->modalHeading('Pré-visualizar')
+                        ->modalContent(function (EmailTemplateLayout $record) {
+                            $previewUrl = route('filament-email-manager.preview.layout', $record);
 
-                        return view('filament-email-manager::preview', [
-                            'previewUrl' => $previewUrl,
-                        ]);
-                    })
-                    ->modalWidth('7xl')
-                    ->modalSubmitAction(false)
-                    ->modalCancelActionLabel('Close')
-                    ->extraModalFooterActions(function (EmailTemplateLayout $record) {
-                        return [
-                            Actions\Action::make('openInNewTab')
-                                ->label('Open in new tab')
-                                ->icon('heroicon-o-arrow-top-right-on-square')
-                                ->color('gray')
-                                ->url(route('filament-email-manager.preview.layout', $record))
-                                ->openUrlInNewTab(),
-                        ];
-                    }),
+                            return view('filament-email-manager::preview', [
+                                'previewUrl' => $previewUrl,
+                            ]);
+                        })
+                        ->modalWidth('7xl')
+                        ->modalSubmitAction(false)
+                        ->modalCancelActionLabel('Fechar')
+                        ->extraModalFooterActions(function (EmailTemplateLayout $record) {
+                            return [
+                                Actions\Action::make('openInNewTab')
+                                    ->label('Abrir em nova aba')
+                                    ->icon('heroicon-o-arrow-top-right-on-square')
+                                    ->color('gray')
+                                    ->url(route('filament-email-manager.preview.layout', $record))
+                                    ->openUrlInNewTab(),
+                            ];
+                        }),
 
-                Actions\Action::make('duplicate')
-                    ->icon('heroicon-o-document-duplicate')
-                    ->color('warning')
-                    ->action(function (EmailTemplateLayout $record) {
-                        $newLayout = $record->replicate(['email_templates_count']);
-                        $newLayout->name = $record->name . ' (Copy)';
-                        $newLayout->is_default = false;
-                        $newLayout->save();
+                    Actions\Action::make('duplicate')
+                        ->label('Duplicar')
+                        ->icon('heroicon-o-document-duplicate')
+                        ->color('warning')
+                        ->action(function (EmailTemplateLayout $record) {
+                            $newLayout = $record->replicate(['email_templates_count']);
+                            $newLayout->name = $record->name . ' (Copy)';
+                            $newLayout->is_default = false;
+                            $newLayout->save();
 
-                        return redirect(static::getUrl('edit', ['record' => $newLayout]));
-                    }),
+                            return redirect(static::getUrl('edit', ['record' => $newLayout]));
+                        }),
 
-                Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+                    Actions\EditAction::make(),
+                    Actions\DeleteAction::make(),
+                ]),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([

@@ -4,9 +4,9 @@ return [
     'navigation' => [
         'group' => 'Gestão de Email',
         'smtp_servers' => 'Servidores SMTP',
-        'email_templates' => 'Modelos de Email',
-        'email_template_layouts' => 'Layouts de Email',
-        'email_logs' => 'Histórico de Emails',
+        'email_templates' => 'Modelos',
+        'email_template_layouts' => 'Layouts',
+        'email_logs' => 'Emails Enviados',
     ],
 
     'smtp_servers' => [

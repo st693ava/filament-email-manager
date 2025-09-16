@@ -136,7 +136,7 @@ class EmailTemplateResource extends Resource
                             ])
                             ->columns(2)
                             ->collapsible()
-                            ->itemLabel(fn (array $state): ?string => $state['name'] ?? null)
+                            ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                             ->addActionLabel('Add Placeholder')
                             ->helperText('Define placeholders that can be used in subject and content'),
 
@@ -207,6 +207,7 @@ class EmailTemplateResource extends Resource
                 Actions\Action::make('preview')
                     ->icon('heroicon-o-eye')
                     ->color('info')
+                    ->label('Pré-visualizar')
                     ->form([
                         LayoutComponents\Section::make(__('filament-email-manager::filament-email-manager.email_templates.sections.preview_data'))
                             ->schema(function (EmailTemplate $record) {

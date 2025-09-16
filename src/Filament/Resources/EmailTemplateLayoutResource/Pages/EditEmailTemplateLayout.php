@@ -15,7 +15,7 @@ class EditEmailTemplateLayout extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()->hiddenLabel()->tooltip('Eliminar')->icon('heroicon-o-trash'),
         ];
     }
 
