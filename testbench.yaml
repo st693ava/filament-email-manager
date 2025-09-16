@@ -1,0 +1,23 @@
+providers:
+  - St693ava\FilamentEmailManager\FilamentEmailManagerServiceProvider
+  - Filament\FilamentServiceProvider
+
+workbench:
+  start: /admin
+  install: true
+  welcome: false
+  user: admin@example.com
+  guard: web
+
+discovers:
+  web: true
+  api: false
+  commands: true
+  components: true
+  views: true
+
+env:
+  - APP_KEY=base64:Hko9x4tjWGecFNrbD9+fAcfZrSQsYhF3DyBPAX4iZn8=
+  - DB_CONNECTION=sqlite
+  - DB_DATABASE=:memory:
+  - MAIL_MAILER=log
