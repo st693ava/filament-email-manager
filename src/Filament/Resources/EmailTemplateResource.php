@@ -14,6 +14,7 @@ use St693ava\FilamentEmailManager\Filament\Resources\EmailTemplateResource\Pages
 use St693ava\FilamentEmailManager\Models\EmailTemplate;
 use St693ava\FilamentEmailManager\Models\EmailTemplateLayout;
 use St693ava\FilamentEmailManager\Services\EmailService;
+use UnitEnum;
 
 class EmailTemplateResource extends Resource
 {
@@ -23,24 +24,28 @@ class EmailTemplateResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 1;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    // naviation group
+    protected static UnitEnum|string|null $navigationGroup = 'Emails';
+
 
 
     public static function getNavigationLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_templates.title');
+        return 'Templates';
     }
 
     public static function getModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_templates.singular');
+        return 'Template';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_templates.plural');
+        return 'Templates';
     }
 
     public static function form(Schema $schema): Schema

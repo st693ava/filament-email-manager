@@ -13,12 +13,13 @@ use Filament\Tables\Table;
 use Filament\Actions;
 use St693ava\FilamentEmailManager\Filament\Resources\EmailTemplateLayoutResource\Pages;
 use St693ava\FilamentEmailManager\Models\EmailTemplateLayout;
+use UnitEnum;
 
 class EmailTemplateLayoutResource extends Resource
 {
     protected static ?string $model = EmailTemplateLayout::class;
 
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-square-3-stack-3d';
+    protected static \BackedEnum|string|null $navigationIcon =  'heroicon-o-paint-brush';
 
     protected static bool $hasTitleCaseModelLabel = false;
 
@@ -26,20 +27,23 @@ class EmailTemplateLayoutResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
+    // naviation group
+    protected static UnitEnum|string|null $navigationGroup = 'Emails';
+
 
     public static function getNavigationLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_template_layouts.title');
+        return 'Layouts';
     }
 
     public static function getModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_template_layouts.singular');
+        return 'Layout';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_template_layouts.plural');
+        return 'Layouts';
     }
 
     public static function form(Schema $schema): Schema

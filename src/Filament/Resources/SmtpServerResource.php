@@ -14,6 +14,7 @@ use Filament\Actions;
 use St693ava\FilamentEmailManager\Filament\Resources\SmtpServerResource\Pages;
 use St693ava\FilamentEmailManager\Models\SmtpServer;
 use St693ava\FilamentEmailManager\Services\MailConfigService;
+use UnitEnum;
 
 class SmtpServerResource extends Resource
 {
@@ -23,9 +24,13 @@ class SmtpServerResource extends Resource
 
     protected static bool $hasTitleCaseModelLabel = false;
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    // naviation group
+    protected static UnitEnum|string|null $navigationGroup = 'Emails';
+
 
 
     public static function getNavigationLabel(): string
@@ -101,8 +106,8 @@ class SmtpServerResource extends Resource
                             ->label(__('filament-email-manager::filament-email-manager.smtp_servers.fields.password'))
                             ->password()
                             ->revealable()
-                            ->dehydrateStateUsing(fn ($state) => filled($state) ? $state : null)
-                            ->dehydrated(fn ($state) => filled($state))
+                            ->dehydrateStateUsing(fn($state) => filled($state) ? $state : null)
+                            ->dehydrated(fn($state) => filled($state))
                             ->placeholder(__('filament-email-manager::filament-email-manager.smtp_servers.placeholders.password')),
                     ])
                     ->columns(2),
@@ -178,7 +183,7 @@ class SmtpServerResource extends Resource
 
                 Tables\Columns\TextColumn::make('encryption')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'tls' => 'success',
                         'ssl' => 'warning',
                         default => 'gray',
@@ -190,7 +195,7 @@ class SmtpServerResource extends Resource
 
                 Tables\Columns\TextColumn::make('rate_limit_per_hour')
                     ->label('Rate Limit')
-                    ->formatStateUsing(fn ($state) => $state > 0 ? $state . '/hour' : 'Unlimited')
+                    ->formatStateUsing(fn($state) => $state > 0 ? $state . '/hour' : 'Unlimited')
                     ->sortable(),
 
                 Tables\Columns\IconColumn::make('is_active')
@@ -286,7 +291,7 @@ class SmtpServerResource extends Resource
                     ->icon('heroicon-o-star')
                     ->color('success')
                     ->requiresConfirmation()
-                    ->visible(fn (SmtpServer $record) => !$record->is_default)
+                    ->visible(fn(SmtpServer $record) => !$record->is_default)
                     ->action(function (SmtpServer $record) {
                         $mailConfig = app(MailConfigService::class);
                         $mailConfig->setAsDefault($record);

@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Actions;
 use St693ava\FilamentEmailManager\Models\EmailLog;
+use UnitEnum;
 
 class EmailLogResource extends Resource
 {
@@ -18,20 +19,24 @@ class EmailLogResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    // naviation group
+    protected static UnitEnum|string|null $navigationGroup = 'Emails';
+
+
 
     public static function getNavigationLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_logs.title');
+        return 'Emails Enviados';
     }
 
     public static function getModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_logs.singular');
+        return 'Email Enviado';
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('filament-email-manager::filament-email-manager.email_logs.plural');
+        return 'Emails Enviados';
     }
 
     public static function table(Table $table): Table
@@ -57,7 +62,7 @@ class EmailLogResource extends Resource
 
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'sent' => 'success',
                         'pending' => 'warning',
                         'failed' => 'danger',
